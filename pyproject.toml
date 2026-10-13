@@ -1,0 +1,25 @@
+[project]
+name = "tcm-wiki-mcp"
+version = "0.1.0"
+description = "中医知识库 MCP 服务器：将 Obsidian 构建的中医 wiki（丁甘仁医案、傅青主女科/男科、医学衷中参西录、针灸大成）暴露为 MCP 工具"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "mcp>=1.2.0",
+]
+
+[project.scripts]
+tcm-wiki-mcp = "tcm_wiki_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tcm_wiki_mcp"]
+
+# 国内稳定源，加速依赖安装
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
