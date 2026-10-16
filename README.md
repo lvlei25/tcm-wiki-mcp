@@ -36,6 +36,14 @@ uv sync
 uv run tcm-wiki-mcp
 ```
 
+不用 uv 时，也可以用 pip：
+
+```bash
+# 安装锁定版本的依赖（国内镜像）
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install -e .
+```
+
 知识库根目录默认为本仓库根目录；如需指向其他位置，设置环境变量 `TCM_WIKI_ROOT`。
 
 ## 在 MCP 客户端中配置
