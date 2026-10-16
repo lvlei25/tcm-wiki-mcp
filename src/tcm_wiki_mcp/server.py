@@ -42,7 +42,11 @@ def list_entries(category: str, keyword: str | None = None) -> str:
         category: 分类名，取值 concept / entity / source / source_ref
         keyword: 可选，过滤条目名中包含该关键词的条目
     """
-    entries = _index.list_entries(category, keyword)
+    try:
+        entries = _index.list_entries(category, keyword)
+    except ValueError as exc:
+        # 分类名非法时返回可读提示，避免异常被框架吞掉后客户端拿不到可用分类
+        return str(exc)
     if not entries:
         return f"分类 {category} 下没有匹配的条目。"
     suffix = f"（名称含「{keyword}」）" if keyword else ""
@@ -59,7 +63,10 @@ def get_entry(name: str, category: str | None = None) -> str:
         name: 条目名，如「人参」「六经辨证」
         category: 可选，限定分类以精确查找
     """
-    matches = _index.find(name, category)
+    try:
+        matches = _index.find(name, category)
+    except ValueError as exc:
+        return str(exc)
     if not matches:
         return f"未找到条目「{name}」。可先用 search 全文检索，或用 list_entries 查看条目列表。"
     parts = []
@@ -77,7 +84,11 @@ def search(query: str, category: str | None = None, limit: int = 10) -> str:
         category: 可选，限定分类范围
         limit: 最多返回条数，默认 10
     """
-    results = _index.search(query, category, limit)
+    try:
+        results = _index.search(query, category, limit)
+    except ValueError as exc:
+        # 覆盖空检索词与非法分类两种情况
+        return str(exc)
     if not results:
         return f"知识库中没有同时包含这些词的条目：{query}"
     lines = [f"检索「{query}」命中 {len(results)} 条（按命中次数排序）：", ""]
